@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package protocols.p2p;
+
+message MessageData {
+    string clientVersion = 1;
+    int64 timestamp = 2;
+    string id = 3;
+    bool gossip = 4;
+    string nodeId = 5;
+    bytes nodePubKey = 6;
+    bytes sign = 7; 
+}
+
+message PingRequest {
+    MessageData messageData = 1;
+    string message = 2;
+}
+
+message PingResponse {
+    MessageData messageData = 1;
+    string message = 2;
+}
+
+message EchoRequest {
+    MessageData messageData = 1;
+    string message = 2;
+}
+
+message EchoResponse {
+    MessageData messageData = 1;
+    string message = 2;
+}
