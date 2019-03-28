@@ -10,7 +10,8 @@ import (
 
 	tcp "github.com/libp2p/go-tcp-transport"
 
-	tu "github.com/czh0526/p2p/testutil"
+	tu "github.com/czh0526/libp2p/testutil"
+	inet "github.com/libp2p/go-libp2p-net"
 	pstore "github.com/libp2p/go-libp2p-peerstore"
 	pstoremem "github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	swarm "github.com/libp2p/go-libp2p-swarm"
@@ -68,19 +69,27 @@ func GenSwarm(t *testing.T, ctx context.Context, opts ...Option) *swarm.Swarm {
 	// 构建 swarm 网络
 	s := swarm.NewSwarm(ctx, p.ID, ps, nil)
 
+	// 构建 libp2p 的 Transport 对象
 	tcpTransport := tcp.NewTCPTransport(GenUpgrader(s))
 	tcpTransport.DisableReuseport = cfg.disableReuseport
 
+	// 关联 Swarm 和 Transport 对象
 	if err := s.AddTransport(tcpTransport); err != nil {
 		t.Fatal(err)
 	}
 
 	if !cfg.dialOnly {
-		if err := s.Listen(); err != nil {
+		if err := s.Listen(p.Addr); err != nil {
 			t.Fatal(err)
 		}
 		s.Peerstore().AddAddrs(p.ID, s.ListenAddresses(), pstore.PermanentAddrTTL)
 	}
 
 	return s
+}
+
+func DivulgeAddresses(a, b inet.Network) {
+	id := a.LocalPeer()
+	addrs := a.Peerstore().Addrs(id)
+	b.Peerstore().AddAddrs(id, addrs, pstore.PermanentAddrTTL)
 }
