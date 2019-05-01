@@ -61,6 +61,6 @@ func main() {
 
 	fmt.Println()
 	fmt.Println("在源节点终端执行下列命令 ==> ")
-	fmt.Printf("\tgo run main.go --relay_addr %s --dest_id %s \n", relayAddr, h3.ID())
+	fmt.Printf("\tgo run main.go --relay_addr %s --dest_id %s \n", relayAddr, h3.ID().Pretty())
 	select {}
 }

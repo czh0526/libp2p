@@ -37,6 +37,6 @@ func main() {
 	fmt.Println()
 	fmt.Println("在目标节点的终端执行下列命令 ==> ")
 
-	fmt.Printf("\tgo run main.go --relay_addr %s/ipfs/%s \n", relayAddr, h2.ID())
+	fmt.Printf("\tgo run main.go --relay_addr %s/ipfs/%s \n", relayAddr, h2.ID().Pretty())
 	select {}
 }
