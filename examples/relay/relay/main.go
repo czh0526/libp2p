@@ -17,7 +17,9 @@ func init() {
 }
 
 func main() {
-	h2, err := libp2p.New(context.Background(), libp2p.EnableRelay(circuit.OptHop))
+	h2, err := libp2p.New(context.Background(),
+		libp2p.ListenAddrStrings("/ip4/127.0.0.1/tcp/13002"),
+		libp2p.EnableRelay(circuit.OptHop))
 	if err != nil {
 		panic(err)
 	}
