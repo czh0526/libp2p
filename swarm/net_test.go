@@ -24,17 +24,23 @@ func TestConnectednessCorrect(t *testing.T) {
 		}
 	}
 
+	/*
+		0 --------- 1
+		|			|
+		|			|
+		3 --------- 2
+	*/
 	dial(nets[0], nets[1])
-	dial(nets[0], nets[3])
 	dial(nets[1], nets[2])
-	dial(nets[3], nets[2])
+	dial(nets[2], nets[3])
+	dial(nets[3], nets[0])
 
 	time.Sleep(time.Millisecond * 100)
 
 	expectConnectedness(t, nets[0], nets[1], inet.Connected)
-	expectConnectedness(t, nets[0], nets[3], inet.Connected)
 	expectConnectedness(t, nets[1], nets[2], inet.Connected)
-	expectConnectedness(t, nets[3], nets[2], inet.Connected)
+	expectConnectedness(t, nets[2], nets[3], inet.Connected)
+	expectConnectedness(t, nets[3], nets[0], inet.Connected)
 	expectConnectedness(t, nets[0], nets[2], inet.NotConnected)
 	expectConnectedness(t, nets[1], nets[3], inet.NotConnected)
 

@@ -49,18 +49,18 @@ func makeRoutedHost(listenPort int, randseed int64, bootstrapPeers []pstore.Peer
 		libp2p.NATPortMap(),
 	}
 
-	fmt.Println("构建 basicHost")
+	fmt.Println("构建 BasicHost")
 	ctx := context.Background()
 	basicHost, err := libp2p.New(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println("构建 IpfsDHT")
+	fmt.Println("构建 IpfsDHT( 实现 IpfsRouting 接口 )")
 	dstore := dsync.MutexWrap(ds.NewMapDatastore())
 	dht := dht.NewDHT(ctx, basicHost, dstore)
 
-	fmt.Println("BasicHost + IpfsDHT => RoutedHost")
+	fmt.Println("BasicHost + IpfsRouting => RoutedHost")
 	routedHost := rhost.Wrap(basicHost, dht)
 
 	// 让 routedHost 连接 bootstrapPeers 节点

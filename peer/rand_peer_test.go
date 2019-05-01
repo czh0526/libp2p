@@ -56,6 +56,10 @@ func TestKeypair2PeerID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("public key hash => peerId error: %s", err)
 	}
+	fmt.Printf("peerid from B58 \t= %s \n", peerid)
+
+	peerid2 := peer.ID(hash)
+	fmt.Printf("peerid from bytes \t= %s \n", peerid2)
 
 	// 检验 public key 与 peer.ID 是否匹配
 	if !peerid.MatchesPublicKey(pub) {
@@ -65,7 +69,7 @@ func TestKeypair2PeerID(t *testing.T) {
 		t.Fatalf("peerid doesn't match with private key")
 	}
 
-	peerid2, err := peer.IDFromPublicKey(pub)
+	peerid2, err = peer.IDFromPublicKey(pub)
 	if peerid.String() != peerid2.String() {
 		t.Fatalf("peerid doesn't match with peerid2")
 	}

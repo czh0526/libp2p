@@ -1,0 +1,2 @@
+test2019/04/11 11:18:55 log init ok.
+test2019/04/11 11:19:05 error: no NAT found

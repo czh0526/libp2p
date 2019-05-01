@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -49,6 +50,25 @@ func RandTestKeyPair(bits int) (ci.PrivKey, ci.PubKey, error) {
 	seed += atomic.AddInt64(&generatedPairs, 1) << 32
 	r := rand.New(rand.NewSource(seed))
 	return ci.GenerateKeyPairWithReader(ci.ECDSA, bits, r)
+}
+
+var lastPort = struct {
+	port int
+	sync.Mutex
+}{}
+
+func RandLocalTCPAddress() ma.Multiaddr {
+	lastPort.Lock()
+	if lastPort.port == 0 {
+		lastPort.port = 1000 + SeededRand.Intn(50000)
+	}
+	port := lastPort.port
+	lastPort.port++
+	lastPort.Unlock()
+
+	addr := fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", port)
+	maddr, _ := ma.NewMultiaddr(addr)
+	return maddr
 }
 
 func RandPeerNetParams() (*PeerNetParams, error) {

@@ -76,6 +76,7 @@ func SubtestBasic(t *testing.T, ta, tb tpt.Transport, maddr ma.Multiaddr, peerA 
 		}
 	}()
 
+	// 被动监听的例程
 	go func() {
 		defer close(done)
 		var err error

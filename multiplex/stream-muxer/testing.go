@@ -92,17 +92,22 @@ func echoStream(s smux.Stream) {
 }
 
 func SubtestSimpleWrite(t *testing.T, tr smux.Transport) {
+	// 创建监听
 	l, err := net.Listen("tcp", "localhost:0")
 	checkErr(t, err)
 	fmt.Printf("listening at %s \n", l.Addr().String())
+
+	// 守护监听端口
 	done := GoServe(t, tr, l)
 	defer done()
 
+	// 连接监听端口
 	fmt.Printf("dialing to %s \n", l.Addr().String())
 	ncl, err := net.Dial("tcp", l.Addr().String())
 	checkErr(t, err)
 	defer ncl.Close()
 
+	// 包装 net.Conn ==> smux.Conn
 	fmt.Printf("【wrapping conn】: smux.Transport(%T) -> (net.Conn ==> smux.Conn)\n", tr)
 	cl, err := tr.NewConn(ncl, false)
 	checkErr(t, err)
